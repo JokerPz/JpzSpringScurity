@@ -1,7 +1,11 @@
 # 应用名称
 spring:
-    application:
+  application:
       name: JpzSpringScurity
+  datasource:
+    url: jdbc:mysql://localhost:3306/dev-demo?characterEncoding=utf8&useUnicode=true
+    username: root
+    password: 123456
 # 应用服务 WEB 访问端口
 server:
   port: 8080

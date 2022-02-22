@@ -1,7 +1,10 @@
 package com.jokerpz.jpzspringscurity.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class LoginController {
@@ -14,12 +17,14 @@ public class LoginController {
         return "redirect:/home.html";
     }
 
-    @RequestMapping("/admin/hello")
+    @GetMapping("/admin/hello")
+    @ResponseBody
     public String admin() {
         return "hello admin";
     }
 
-    @RequestMapping("/user/hello")
+    @GetMapping("/user/hello")
+    @ResponseBody
     public String user() {
         return "hello user";
     }

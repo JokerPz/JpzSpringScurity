@@ -54,6 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint((request, response, e) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.getWriter().write("尚未登陆，请先登陆");
+                }).accessDeniedHandler((request, response, e) -> {
+                    response.setContentType("application/json;charset=utf-8");
+                    response.getWriter().write("无此权限");
                 })
                 .and()
                 .logout()
