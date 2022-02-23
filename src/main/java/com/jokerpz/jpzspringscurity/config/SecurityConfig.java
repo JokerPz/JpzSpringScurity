@@ -1,6 +1,7 @@
 package com.jokerpz.jpzspringscurity.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jokerpz.jpzspringscurity.config.userdetail.JpaUserDetailService;
 import jdk.nashorn.internal.ir.RuntimeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -9,8 +10,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -19,18 +22,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JpaUserDetailService jpaUserDetailService;
+
+    @Autowired
+    private JdbcTokenRepositoryImpl jdbcTokenRepository;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //auth.inMemoryAuthentication()
         //        .withUser("joker")
         //        .password(passwordEncoder.encode("1"))
         //        .roles("admin");
+        auth.userDetailsService(jpaUserDetailService);
         super.configure(auth);
     }
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/js/**", "/css/**","/images/**");
-        //super.configure(web);
     }
 
     @Override
@@ -54,6 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint((request, response, e) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.getWriter().write("尚未登陆，请先登陆");
+                }).accessDeniedHandler((request, response, e) -> {
+                    response.setContentType("application/json;charset=utf-8");
+                    response.getWriter().write("无此权限");
                 })
                 .and()
                 .logout()
@@ -62,8 +74,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     response.setContentType("application/json;charset=utf-8");
                     response.getWriter().write("注销成功");
                 })
-
+                //.and()
+                //.userDetailsService(jpaUserDetailService)
+                .and()
+                .rememberMe()
+                .key("test")
+                .tokenRepository(jdbcTokenRepository)
         ;
+
         http.authorizeRequests()
                 //login.html不需要被认证
                 .antMatchers("/login.html").permitAll()
