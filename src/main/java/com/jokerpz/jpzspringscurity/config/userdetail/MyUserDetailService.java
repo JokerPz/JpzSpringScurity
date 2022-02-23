@@ -1,4 +1,4 @@
-package com.jokerpz.jpzspringscurity.config;
+package com.jokerpz.jpzspringscurity.config.userdetail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;

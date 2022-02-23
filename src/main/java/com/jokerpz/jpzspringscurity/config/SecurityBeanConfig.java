@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 
 import javax.sql.DataSource;
 
@@ -30,7 +31,7 @@ public class SecurityBeanConfig {
         return inMemoryUserDetailsManager;
     }
 
-    @Bean
+    //@Bean
     public UserDetailsService jdbcUserDetailsManager() {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
         jdbcUserDetailsManager.setDataSource(dataSource);
@@ -38,8 +39,16 @@ public class SecurityBeanConfig {
             jdbcUserDetailsManager.createUser(User.withUsername("jdbcAdmin").password(bCryptPasswordEncoder().encode("1")).roles("admin", "user").build());
         }
         if (!jdbcUserDetailsManager.userExists("jdbcUser")) {
-            jdbcUserDetailsManager.createUser(User.withUsername("jdbcUser").password(bCryptPasswordEncoder().encode("1")).roles("admin", "user").build());
+            jdbcUserDetailsManager.createUser(User.withUsername("jdbcUser").password(bCryptPasswordEncoder().encode("1")).roles("admin").build());
         }
         return jdbcUserDetailsManager;
+    }
+
+    @Bean
+    public JdbcTokenRepositoryImpl jdbcTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        //jdbcTokenRepository.setCreateTableOnStartup(true);
+        jdbcTokenRepository.setDataSource(dataSource);
+        return jdbcTokenRepository;
     }
 }
