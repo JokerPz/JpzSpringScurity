@@ -3,7 +3,7 @@ spring:
   application:
       name: JpzSpringScurity
   datasource:
-    url: jdbc:mysql://localhost:3306/dev-demo?characterEncoding=utf8&useUnicode=true
+    url: jdbc:mysql://localhost:3306/dev-demo?characterEncoding=utf8&useUnicode=true&serverTimezone=UTC
     username: root
     password: 123456
 

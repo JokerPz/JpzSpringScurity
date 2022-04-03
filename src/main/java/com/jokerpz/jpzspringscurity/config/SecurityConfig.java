@@ -58,8 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     response.setContentType("application/json;charset=utf-8");
                     response.getWriter().write(e.getMessage());
                 })
-                .and()
-                .exceptionHandling()
+            .and()
+            .exceptionHandling()
                 .authenticationEntryPoint((request, response, e) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.getWriter().write("尚未登陆，请先登陆");
@@ -67,8 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     response.setContentType("application/json;charset=utf-8");
                     response.getWriter().write("无此权限");
                 })
-                .and()
-                .logout()
+            .and()
+            .logout()
                 //.logoutUrl("/logout")
                 .logoutSuccessHandler((request, response, authentication) -> {
                     response.setContentType("application/json;charset=utf-8");
@@ -76,8 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 //.and()
                 //.userDetailsService(jpaUserDetailService)
-                .and()
-                .rememberMe()
+            .and()
+            .rememberMe()
                 .key("test")
                 .tokenRepository(jdbcTokenRepository)
         ;
